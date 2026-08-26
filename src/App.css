@@ -1,0 +1,18 @@
+main {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+h1 {
+  margin-bottom: 8px;
+  color: #2563eb;
+}
+
+section {
+  margin-top: 40px;
+  padding: 24px;
+  background-color: white;
+  border-radius: 12px;
+}
