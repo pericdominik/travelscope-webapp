@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import CountryCard from './components/CountryCard'
+import countriesData from './data/countries.json'
 
 type Country = {
   name: string
@@ -10,34 +11,36 @@ type Country = {
   continent: string
 }
 
+type ApiCountry = {
+  names: {
+    common: string
+  }
+  capitals: {
+    name: string
+  }[]
+  population: number
+  region: string
+  languages: {
+    name: string
+  }[]
+}
+
 function App() {
   const appName: string = 'TravelScope'
   const description: string =
     'Istraži države svijeta i isplaniraj svoja buduća putovanja.'
 
-  const countries: Country[] = [
-    {
-      name: 'Hrvatska',
-      capital: 'Zagreb',
-      population: 3850000,
-      continent: 'Europa',
-      language: 'hrvatski',
-    },
-    {
-      name: 'Japan',
-      capital: 'Tokio',
-      population: 123000000,
-      continent: 'Azija',
-      language: 'japanski',
-    },
-    {
-      name: 'Tajland',
-      capital: 'Bangkok',
-      population: 71600000,
-      continent: 'Azija',
-      language: 'tajlandski',
-    },
-  ]
+  const countries: Country[] = (countriesData as ApiCountry[]).map(
+    (country) => ({
+      name: country.names.common,
+      capital: country.capitals[0]?.name ?? 'Nije navedeno',
+      population: country.population,
+      continent: country.region,
+      language:
+        country.languages.map((language) => language.name).join(', ') ||
+        'Nije navedeno',
+    }),
+  )
 
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedContinent, setSelectedContinent] = useState('Svi')
@@ -70,8 +73,11 @@ function App() {
         onChange={(event) => setSelectedContinent(event.target.value)}
       >
         <option value="Svi">Svi kontinenti</option>
-        <option value="Europa">Europa</option>
-        <option value="Azija">Azija</option>
+        <option value="Europe">Europa</option>
+        <option value="Asia">Azija</option>
+        <option value="Africa">Afrika</option>
+        <option value="Americas">Amerike</option>
+        <option value="Oceania">Oceanija</option>
       </select>
 
       <section>
