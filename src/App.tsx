@@ -14,28 +14,28 @@ function App() {
     'Istraži države svijeta i isplaniraj svoja buduća putovanja.'
 
   const countries: Country[] = [
-  {
-    name: 'Hrvatska',
-    capital: 'Zagreb',
-    population: 3850000,
-    continent: 'Europa',
-    language: 'hrvatski',
-  },
-  {
-    name: 'Japan',
-    capital: 'Tokio',
-    population: 123000000,
-    continent: 'Azija',
-    language: 'japanski',
-  },
-  {
-    name: 'Tajland',
-    capital: 'Bangkok',
-    population: 71600000,
-    continent: 'Azija',
-    language: 'tajlandski',
-  },
-]
+    {
+      name: 'Hrvatska',
+      capital: 'Zagreb',
+      population: 3850000,
+      continent: 'Europa',
+      language: 'hrvatski',
+    },
+    {
+      name: 'Japan',
+      capital: 'Tokio',
+      population: 123000000,
+      continent: 'Azija',
+      language: 'japanski',
+    },
+    {
+      name: 'Tajland',
+      capital: 'Bangkok',
+      population: 71600000,
+      continent: 'Azija',
+      language: 'tajlandski',
+    },
+  ]
 
   return (
     <main>
@@ -44,15 +44,17 @@ function App() {
 
       <section>
         <h2>Istraži svijet</h2>
-        {countries.map((country) => (
-          <article key={country.name}>
-            <h3>{country.name}</h3>
-            <p>Glavni grad: {country.capital}</p>
-            <p>Stanovništvo: {country.population.toLocaleString('hr-HR')}</p>
-            <p>Kontinent: {country.continent}</p>
-            <p>Jezik: {country.language}</p>
-          </article>
-        ))}
+        <div className="country-grid">
+            {countries.map((country) => (
+              <article className="country-card" key={country.name}>
+              <h3>{country.name}</h3>
+              <p>Glavni grad: {country.capital}</p>
+              <p>Stanovništvo: {country.population.toLocaleString('hr-HR')}</p>
+              <p>Kontinent: {country.continent}</p>
+              <p>Jezik: {country.language}</p>
+            </article>
+          ))}
+        </div>
       </section>
     </main>
   )

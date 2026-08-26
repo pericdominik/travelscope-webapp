@@ -16,3 +16,28 @@ section {
   background-color: white;
   border-radius: 12px;
 }
+
+.country-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.country-card {
+  padding: 20px;
+  border: 1px solid #dbe3ef;
+  border-radius: 10px;
+  background-color: #f8fafc;
+}
+
+.country-card h3 {
+  margin-top: 0;
+  color: #2563eb;
+}
+
+@media (max-width: 800px) {
+  .country-grid {
+    grid-template-columns: 1fr;
+  }
+}
