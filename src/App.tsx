@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import './App.css'
 import CountryCard from './components/CountryCard'
 
@@ -38,15 +39,27 @@ function App() {
     },
   ]
 
+  const [searchTerm, setSearchTerm] = useState('')
+  const filteredCountries = countries.filter((country) =>
+    country.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
+
   return (
     <main>
       <h1>{appName}</h1>
       <p>{description}</p>
 
+      <input
+        type="text"
+        placeholder="Pretraži države..."
+        value={searchTerm}
+        onChange={(event) => setSearchTerm(event.target.value)}
+      />
+
       <section>
         <h2>Istraži svijet</h2>
         <div className="country-grid">
-            {countries.map((country) => (
+            {filteredCountries.map((country) => (
               <CountryCard
                 key={country.name}
                 name={country.name}
