@@ -40,9 +40,18 @@ function App() {
   ]
 
   const [searchTerm, setSearchTerm] = useState('')
-  const filteredCountries = countries.filter((country) =>
-    country.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  const [selectedContinent, setSelectedContinent] = useState('Svi')
+
+  const filteredCountries = countries.filter((country) => {
+  const matchesSearch = country.name
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase())
+
+  const matchesContinent =
+    selectedContinent === 'Svi' || country.continent === selectedContinent
+
+  return matchesSearch && matchesContinent
+})
 
   return (
     <main>
@@ -55,6 +64,15 @@ function App() {
         value={searchTerm}
         onChange={(event) => setSearchTerm(event.target.value)}
       />
+
+      <select
+        value={selectedContinent}
+        onChange={(event) => setSelectedContinent(event.target.value)}
+      >
+        <option value="Svi">Svi kontinenti</option>
+        <option value="Europa">Europa</option>
+        <option value="Azija">Azija</option>
+      </select>
 
       <section>
         <h2>Istraži svijet</h2>
