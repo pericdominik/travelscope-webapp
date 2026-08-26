@@ -1,4 +1,5 @@
 import './App.css'
+import CountryCard from './components/CountryCard'
 
 type Country = {
   name: string
@@ -46,14 +47,15 @@ function App() {
         <h2>Istraži svijet</h2>
         <div className="country-grid">
             {countries.map((country) => (
-              <article className="country-card" key={country.name}>
-              <h3>{country.name}</h3>
-              <p>Glavni grad: {country.capital}</p>
-              <p>Stanovništvo: {country.population.toLocaleString('hr-HR')}</p>
-              <p>Kontinent: {country.continent}</p>
-              <p>Jezik: {country.language}</p>
-            </article>
-          ))}
+              <CountryCard
+                key={country.name}
+                name={country.name}
+                capital={country.capital}
+                population={country.population}
+                continent={country.continent}
+                language={country.language}
+              />
+            ))}
         </div>
       </section>
     </main>
