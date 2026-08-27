@@ -9,6 +9,7 @@ type Country = {
   population: number
   language: string
   continent: string
+  flagUrl: string
 }
 
 type ApiCountry = {
@@ -23,6 +24,9 @@ type ApiCountry = {
   languages: {
     name: string
   }[]
+  flag: {
+    url_svg: string
+  }
 }
 
 function App() {
@@ -39,6 +43,7 @@ function App() {
       language:
         country.languages.map((language) => language.name).join(', ') ||
         'Nije navedeno',
+      flagUrl: country.flag.url_svg,  
     }),
   )
 
@@ -46,16 +51,16 @@ function App() {
   const [selectedContinent, setSelectedContinent] = useState('Svi')
 
   const filteredCountries = countries.filter((country) => {
-  const matchesSearch = country.name
-    .toLowerCase()
-    .includes(searchTerm.toLowerCase())
+    const matchesSearch = country.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
 
-  const matchesContinent =
-    selectedContinent === 'Svi' || country.continent === selectedContinent
+    const matchesContinent =
+      selectedContinent === 'Svi' || country.continent === selectedContinent
 
-  return matchesSearch && matchesContinent
-})
-
+    return matchesSearch && matchesContinent
+  })
+  
   return (
     <main>
       <h1>{appName}</h1>
@@ -83,16 +88,17 @@ function App() {
       <section>
         <h2>Istraži svijet</h2>
         <div className="country-grid">
-            {filteredCountries.map((country) => (
-              <CountryCard
-                key={country.name}
-                name={country.name}
-                capital={country.capital}
-                population={country.population}
-                continent={country.continent}
-                language={country.language}
-              />
-            ))}
+          {filteredCountries.map((country) => (
+            <CountryCard
+              key={country.name}
+              name={country.name}
+              capital={country.capital}
+              population={country.population}
+              continent={country.continent}
+              language={country.language}
+              flagUrl={country.flagUrl}
+            />
+          ))}
         </div>
       </section>
     </main>
