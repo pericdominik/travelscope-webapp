@@ -69,3 +69,13 @@ input:focus {
   border-radius: 8px;
   border: 1px solid #cbd5e1;
 }
+
+.no-results {
+  margin-top: 24px;
+  padding: 24px;
+  text-align: center;
+  color: #64748b;
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+}

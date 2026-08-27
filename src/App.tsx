@@ -4,6 +4,7 @@ import CountryCard from './components/CountryCard'
 import countriesData from './data/countries.json'
 
 type Country = {
+  code: string
   name: string
   capital: string
   population: number
@@ -27,6 +28,9 @@ type ApiCountry = {
   flag: {
     url_svg: string
   }
+  codes: {
+    alpha_3: string
+  }
 }
 
 function App() {
@@ -36,6 +40,7 @@ function App() {
 
   const countries: Country[] = (countriesData as ApiCountry[]).map(
     (country) => ({
+      code: country.codes.alpha_3 || country.names.common,
       name: country.names.common,
       capital: country.capitals[0]?.name ?? 'Nije navedeno',
       population: country.population,
@@ -87,19 +92,23 @@ function App() {
 
       <section>
         <h2>Istraži svijet</h2>
-        <div className="country-grid">
-          {filteredCountries.map((country) => (
-            <CountryCard
-              key={country.name}
-              name={country.name}
-              capital={country.capital}
-              population={country.population}
-              continent={country.continent}
-              language={country.language}
-              flagUrl={country.flagUrl}
-            />
-          ))}
-        </div>
+        {filteredCountries.length > 0 ? (
+          <div className="country-grid">
+            {filteredCountries.map((country) => (
+              <CountryCard
+                key={country.code}
+                name={country.name}
+                capital={country.capital}
+                population={country.population}
+                continent={country.continent}
+                language={country.language}
+                flagUrl={country.flagUrl}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="no-results">Nema pronađenih država.</p>
+        )}  
       </section>
     </main>
   )
