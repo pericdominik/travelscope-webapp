@@ -79,3 +79,36 @@ input:focus {
   border: 1px dashed #cbd5e1;
   border-radius: 8px;
 }
+
+
+.country-details {
+  margin: 24px 0;
+  padding: 24px;
+  background-color: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+}
+
+.country-details img {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  height: 220px;
+  margin: 20px 0;
+  object-fit: cover;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+}
+
+.country-details button {
+  padding: 10px 16px;
+  color: white;
+  background-color: #2563eb;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.country-details button:hover {
+  background-color: #1d4ed8;
+}

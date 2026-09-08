@@ -5,6 +5,7 @@ type CountryCardProps = {
   continent: string
   language: string
   flagUrl: string
+  onSelect: () => void
 }
 
 function CountryCard({
@@ -14,9 +15,10 @@ function CountryCard({
   continent,
   language,
   flagUrl,
+  onSelect,
 }: CountryCardProps) {
   return (
-    <article className="country-card">
+    <article className="country-card" onClick={onSelect}>
       {flagUrl && (
         <img
           className="country-flag"

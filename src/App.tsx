@@ -54,6 +54,7 @@ function App() {
 
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedContinent, setSelectedContinent] = useState('Svi')
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
 
   const filteredCountries = countries.filter((country) => {
     const matchesSearch = country.name
@@ -70,46 +71,74 @@ function App() {
     <main>
       <h1>{appName}</h1>
       <p>{description}</p>
+      
+      {selectedCountry ? (
+        <section className="country-details">
+          <button onClick={() => setSelectedCountry(null)}>
+            Povratak na države
+          </button>
 
-      <input
-        type="text"
-        placeholder="Pretraži države..."
-        value={searchTerm}
-        onChange={(event) => setSearchTerm(event.target.value)}
-      />
+          {selectedCountry.flagUrl && (
+            <img
+              src={selectedCountry.flagUrl}
+              alt={`Zastava države ${selectedCountry.name}`}
+            />
+          )}
 
-      <select
-        value={selectedContinent}
-        onChange={(event) => setSelectedContinent(event.target.value)}
-      >
-        <option value="Svi">Svi kontinenti</option>
-        <option value="Europe">Europa</option>
-        <option value="Asia">Azija</option>
-        <option value="Africa">Afrika</option>
-        <option value="Americas">Amerike</option>
-        <option value="Oceania">Oceanija</option>
-      </select>
+          <h2>{selectedCountry.name}</h2>
+          <p>Glavni grad: {selectedCountry.capital}</p>
+          <p>
+            Stanovništvo:{' '}
+            {selectedCountry.population.toLocaleString('hr-HR')}
+          </p>
+          <p>Kontinent: {selectedCountry.continent}</p>
+          <p>Jezik: {selectedCountry.language}</p>
+        </section>
+      ) : (
+        <>
+          <input
+            type="text"
+            placeholder="Pretraži države..."
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+          />
 
-      <section>
-        <h2>Istraži svijet</h2>
-        {filteredCountries.length > 0 ? (
-          <div className="country-grid">
-            {filteredCountries.map((country) => (
-              <CountryCard
-                key={country.code}
-                name={country.name}
-                capital={country.capital}
-                population={country.population}
-                continent={country.continent}
-                language={country.language}
-                flagUrl={country.flagUrl}
-              />
-            ))}
-          </div>
-        ) : (
-          <p className="no-results">Nema pronađenih država.</p>
-        )}  
-      </section>
+          <select
+            value={selectedContinent}
+            onChange={(event) => setSelectedContinent(event.target.value)}
+          >
+            <option value="Svi">Svi kontinenti</option>
+            <option value="Europe">Europa</option>
+            <option value="Asia">Azija</option>
+            <option value="Africa">Afrika</option>
+            <option value="Americas">Amerike</option>
+            <option value="Oceania">Oceanija</option>
+          </select>
+
+          <section>
+            <h2>Istraži svijet</h2>
+
+            {filteredCountries.length > 0 ? (
+              <div className="country-grid">
+                {filteredCountries.map((country) => (
+                  <CountryCard
+                    key={country.code}
+                    name={country.name}
+                    capital={country.capital}
+                    population={country.population}
+                    continent={country.continent}
+                    language={country.language}
+                    flagUrl={country.flagUrl}
+                    onSelect={() => setSelectedCountry(country)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="no-results">Nema pronađenih država.</p>
+            )}
+          </section>
+        </>
+      )}
     </main>
   )
 }
