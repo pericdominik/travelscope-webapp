@@ -6,16 +6,21 @@ import countriesData from './data/countries.json'
 type Country = {
   code: string
   name: string
+  officialName: string
   capital: string
   population: number
   language: string
   continent: string
+  area: number
   flagUrl: string
+  timezones: string
+  currency: string
 }
 
 type ApiCountry = {
   names: {
     common: string
+    official: string
   }
   capitals: {
     name: string
@@ -25,12 +30,20 @@ type ApiCountry = {
   languages: {
     name: string
   }[]
+  area: {
+    kilometers: number
+  }
   flag: {
     url_svg: string
   }
   codes: {
     alpha_3: string
   }
+  timezones: string[]
+  currencies: {
+    code: string
+    name: string
+  }[]
 }
 
 function App() {
@@ -42,13 +55,20 @@ function App() {
     (country) => ({
       code: country.codes.alpha_3 || country.names.common,
       name: country.names.common,
+      officialName: country.names.official,
       capital: country.capitals[0]?.name ?? 'Nije navedeno',
       population: country.population,
       continent: country.region,
+      area: country.area.kilometers,
       language:
         country.languages.map((language) => language.name).join(', ') ||
         'Nije navedeno',
-      flagUrl: country.flag.url_svg,  
+      flagUrl: country.flag.url_svg,
+      timezones: country.timezones.join(', ') || 'Nije navedeno',  
+      currency:
+      country.currencies
+        .map((currency) => `${currency.name} (${currency.code})`)
+        .join(', ') || 'Nije navedeno',
     }),
   )
 
@@ -86,13 +106,19 @@ function App() {
           )}
 
           <h2>{selectedCountry.name}</h2>
+          <p>Službeni naziv: {selectedCountry.officialName}</p>
           <p>Glavni grad: {selectedCountry.capital}</p>
           <p>
             Stanovništvo:{' '}
             {selectedCountry.population.toLocaleString('hr-HR')}
           </p>
+          <p>
+            Površina: {selectedCountry.area.toLocaleString('hr-HR')} km²
+          </p>
           <p>Kontinent: {selectedCountry.continent}</p>
+          <p>Vremenske zone: {selectedCountry.timezones}</p>
           <p>Jezik: {selectedCountry.language}</p>
+          <p>Valuta: {selectedCountry.currency}</p>
         </section>
       ) : (
         <>
