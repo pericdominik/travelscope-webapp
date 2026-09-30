@@ -5,6 +5,26 @@ main {
   padding: 40px 0;
 }
 
+.navigation {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.navigation button {
+  padding: 10px 16px;
+  color: white;
+  background-color: #2563eb;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.navigation button:hover {
+  background-color: #1d4ed8;
+}
+
+
 h1 {
   margin-bottom: 8px;
   color: #2563eb;
@@ -29,6 +49,16 @@ section {
   border: 1px solid #dbe3ef;
   border-radius: 10px;
   background-color: #f8fafc;
+
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.country-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgb(15 23 42 / 10%);
 }
 
 .country-card h3 {
@@ -39,6 +69,10 @@ section {
 @media (max-width: 800px) {
   .country-grid {
     grid-template-columns: 1fr;
+  }
+
+  select {
+    margin-left: 0;
   }
 }
 
@@ -57,7 +91,8 @@ select {
   margin-left: 12px;
 }
 
-input:focus {
+input:focus,
+select:focus {
   border-color: #2563eb;
   outline: none;
 }
@@ -107,6 +142,7 @@ input:focus {
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  margin-right: 12px;
 }
 
 .country-details button:hover {

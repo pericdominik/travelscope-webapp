@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import CountryCard from './components/CountryCard'
 import countriesData from './data/countries.json'
@@ -46,6 +46,8 @@ type ApiCountry = {
   }[]
 }
 
+type View = 'countries' | 'wishlist'
+
 function App() {
   const appName: string = 'TravelScope'
   const description: string =
@@ -64,17 +66,36 @@ function App() {
         country.languages.map((language) => language.name).join(', ') ||
         'Nije navedeno',
       flagUrl: country.flag.url_svg,
-      timezones: country.timezones.join(', ') || 'Nije navedeno',  
+      timezones: country.timezones.join(', ') || 'Nije navedeno',
       currency:
-      country.currencies
-        .map((currency) => `${currency.name} (${currency.code})`)
-        .join(', ') || 'Nije navedeno',
+        country.currencies
+          .map((currency) => `${currency.name} (${currency.code})`)
+          .join(', ') || 'Nije navedeno',
     }),
   )
 
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedContinent, setSelectedContinent] = useState('Svi')
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
+
+  const [wishlist, setWishlist] = useState<Country[]>(() => {
+    const savedWishlist = localStorage.getItem('travelscope-wishlist')
+
+    if (savedWishlist) {
+      return JSON.parse(savedWishlist) as Country[]
+    }
+
+    return []
+  })
+
+  const [currentView, setCurrentView] = useState<View>('countries')
+
+  useEffect(() => {
+    localStorage.setItem(
+      'travelscope-wishlist',
+      JSON.stringify(wishlist),
+    )
+  }, [wishlist])
 
   const filteredCountries = countries.filter((country) => {
     const matchesSearch = country.name
@@ -86,17 +107,82 @@ function App() {
 
     return matchesSearch && matchesContinent
   })
-  
+
+  //function addToWishList(country: Country){,,,} ovo dolje arrow funckija
+  const addToWishlist = (country: Country) => {
+    const isAlreadyAdded = wishlist.some(
+      (wishlistCountry) => wishlistCountry.code === country.code,
+    )
+
+    if (!isAlreadyAdded) {
+      setWishlist([...wishlist, country])
+    }
+  }
+
+  const removeFromWishlist = (countryCode: string) => {
+    const updatedWishlist = wishlist.filter(
+      (country) => country.code !== countryCode,
+    )
+
+    setWishlist(updatedWishlist)
+  }
+
+  /*const isSelectedCountryInWishlist = selectedCountry
+    ? wishlist.some(
+        (wishlistCountry) => wishlistCountry.code === selectedCountry.code,
+      )
+    : false
+  */
+
+  let isSelectedCountryInWishlist = false
+
+  if (selectedCountry) {
+    isSelectedCountryInWishlist = wishlist.some(
+      (wishlistCountry) => wishlistCountry.code === selectedCountry.code,
+    )
+  }
+
+
   return (
     <main>
       <h1>{appName}</h1>
       <p>{description}</p>
-      
+
+      <nav className="navigation">
+        <button
+          onClick={() => {
+            setCurrentView('countries')
+            setSelectedCountry(null)
+          }}
+        >
+          Sve države
+        </button>
+
+        <button
+          onClick={() => {
+            setCurrentView('wishlist')
+            setSelectedCountry(null)
+          }}
+        >
+          Lista želja ({wishlist.length})
+        </button>
+      </nav>
+
       {selectedCountry ? (
         <section className="country-details">
           <button onClick={() => setSelectedCountry(null)}>
-            Povratak na države
+            Natrag
           </button>
+
+          {isSelectedCountryInWishlist ? (
+            <button onClick={() => removeFromWishlist(selectedCountry.code)}>
+              Ukloni s liste želja
+            </button>
+          ) : (
+            <button onClick={() => addToWishlist(selectedCountry)}>
+              Dodaj na listu želja
+            </button>
+          )}
 
           {selectedCountry.flagUrl && (
             <img
@@ -120,7 +206,7 @@ function App() {
           <p>Jezik: {selectedCountry.language}</p>
           <p>Valuta: {selectedCountry.currency}</p>
         </section>
-      ) : (
+      ) : currentView === 'countries' ? (
         <>
           <input
             type="text"
@@ -164,6 +250,29 @@ function App() {
             )}
           </section>
         </>
+      ) : (
+        <section>
+          <h2>Moja lista želja</h2>
+
+          {wishlist.length > 0 ? (
+            <div className="country-grid">
+              {wishlist.map((country) => (
+                <CountryCard
+                  key={country.code}
+                  name={country.name}
+                  capital={country.capital}
+                  population={country.population}
+                  continent={country.continent}
+                  language={country.language}
+                  flagUrl={country.flagUrl}
+                  onSelect={() => setSelectedCountry(country)}
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="no-results">Lista želja je prazna.</p>
+          )}
+        </section>
       )}
     </main>
   )
